@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = Botolo::VERSION
   spec.authors       = ["Paolo Perego"]
   spec.email         = ["thesp0nge@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
-  spec.homepage      = ""
+  spec.description   = %q{botolo is a bot engine written in ruby}
+  spec.summary       = %q{botolo is a bot engine written in ruby}
+  spec.homepage      = "http://codesake.com"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
