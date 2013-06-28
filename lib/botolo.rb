@@ -1,5 +1,2 @@
 require "botolo/version"
-
-module Botolo
-  # Your code goes here...
-end
+require "botolo/bot/engine"
