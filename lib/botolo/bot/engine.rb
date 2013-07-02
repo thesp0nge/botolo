@@ -3,23 +3,23 @@ require 'yaml'
 
 module Botolo
   module Bot
-
-    # This is the main bot class, it is responsible of:
-    #   * reading configuration
-    #   * using Twitter APIs
-    #   * do something
     class Engine
 
       def initialize(options={})
         @start_time = Time.now
         @online = false
         @config = read_conf(options[:config])
-        authenticate
+        authenticate if @config['twitter']['enabled']
+
         @tasks = @config['task']
+        @task_pids = []
+
         behaviour = File.join(".", @config['bot']['behaviour']) unless @config['bot']['behaviour'].nil? 
 
         $logger.helo "#{name} v#{version} is starting up"
         
+        $logger.log "#{@tasks.size} tasks loaded"
+
         begin
           load behaviour
           $logger.log "using #{behaviour} as bot behaviour"
@@ -51,18 +51,37 @@ module Botolo
 
       def run
         $logger.log "entering main loop"
+        @tasks.each do |task|
+          $logger.log "here"
+          @task_pids << Thread.new(start_task(task['action'], task['schedule']))
+        end
+      end
+
+      def start_task(name, sleep)
+        $logger.log "starting task #{name} with sleep time #{sleep}"
         while true
-          @tasks.each do |task|
-            begin 
-            @behaviour.send(task["action"].to_sym) if @behaviour.respond_to? task["action"].to_sym
-            rescue => e
-              $logger.err "#{task["action"]} failed (#{e.message})"
-            end
-            sleep calc_sleep_time(task["schedule"])
+          begin 
+            @behaviour.send(name.to_sym) if @behaviour.respond_to? name.to_sym
+          rescue => e
+            $logger.err "#{name} failed (#{e.message})"
           end
+          sleep calc_sleep_time(sleep)
         end
 
       end
+
+      def stop
+        $logger.log "shutting down threads"
+        @task_pids.each do |pid|
+          Thread.kill(pid)
+          $logger.log "pid #{pid} killed" if ! pid.alive? 
+          $logger.err "pid #{pid} not killed" if pid.alive? 
+        end
+
+        true
+      end
+
+      
       def authenticate
         begin
           Twitter.configure do |config|

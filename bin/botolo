@@ -5,10 +5,11 @@ require 'openssl'
 require 'codesake_commons'
 
 DEFAULT_BEHAVIOUR = "./lib/botolo/bot/behaviour.rb"
+
 OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
 $logger  = Codesake::Commons::Logging.instance
-trap("INT")   { $logger.helo('bot is shutting down'); Kernel.exit(0) }
+trap("INT")   { $logger.helo('bot is shutting down'); bot.stop; Kernel.exit(0) }
 
 behaviour_file = DEFAULT_BEHAVIOUR
 config_file = nil

@@ -1,6 +1,6 @@
 # Botolo
 
-TODO: Write a gem description
+Botolo is an engine for bots written in ruby.
 
 ## Installation
 
