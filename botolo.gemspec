@@ -9,7 +9,10 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Paolo Perego"]
   spec.email         = ["thesp0nge@gmail.com"]
   spec.description   = %q{botolo is a bot engine written in ruby}
-  spec.summary       = %q{botolo is a bot engine written in ruby}
+  spec.summary       = %q{botolo is a bot engine written in ruby. With botolo
+    you can focus on writing a set of actions your bot will execute every
+    amount of seconds, minutes or whatever and implement those actions. The
+    part of executing them and putting babies to sleep will be up to botolo.}
   spec.homepage      = "http://codesake.com"
   spec.license       = "MIT"
 

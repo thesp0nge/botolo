@@ -52,13 +52,20 @@ module Botolo
       def run
         $logger.log "entering main loop"
         @tasks.each do |task|
-          $logger.log "here"
-          @task_pids << Thread.new(start_task(task['action'], task['schedule']))
+          @task_pids << Thread.start do
+            start_task(task['action'], task['schedule'])
+          end
+        end
+
+      end
+
+      def infinite_loop
+        while true
+
         end
       end
 
       def start_task(name, sleep)
-        $logger.log "starting task #{name} with sleep time #{sleep}"
         while true
           begin 
             @behaviour.send(name.to_sym) if @behaviour.respond_to? name.to_sym
@@ -74,6 +81,7 @@ module Botolo
         $logger.log "shutting down threads"
         @task_pids.each do |pid|
           Thread.kill(pid)
+          sleep 0.05
           $logger.log "pid #{pid} killed" if ! pid.alive? 
           $logger.err "pid #{pid} not killed" if pid.alive? 
         end

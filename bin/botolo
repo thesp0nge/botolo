@@ -9,7 +9,7 @@ DEFAULT_BEHAVIOUR = "./lib/botolo/bot/behaviour.rb"
 OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
 $logger  = Codesake::Commons::Logging.instance
-trap("INT")   { $logger.helo('bot is shutting down'); bot.stop; Kernel.exit(0) }
+trap("INT")   { @bot.stop; $logger.helo('bot is shutting down'); Kernel.exit(0) }
 
 behaviour_file = DEFAULT_BEHAVIOUR
 config_file = nil
@@ -17,10 +17,10 @@ config_file = ARGV[0] if ARGV.count == 1
 
 $logger.die "usage: botolo bot_configuration_file" if config_file.nil?
 
-bot = Botolo::Bot::Engine.new({:config=>config_file})
-$logger.log "#{bot.name} is online" if bot.online?
-$logger.log "#{bot.name} is offline" unless bot.online?
-bot.run if bot.online?
-
+@bot = Botolo::Bot::Engine.new({:config=>config_file})
+$logger.log "#{@bot.name} is online" if @bot.online?
+$logger.log "#{@bot.name} is offline" unless @bot.online?
+@bot.run if @bot.online?
+@bot.infinite_loop
 
 
