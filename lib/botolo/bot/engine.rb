@@ -23,12 +23,12 @@ module Botolo
         begin
           load behaviour
           $logger.log "using #{behaviour} as bot behaviour"
-          @behaviour = Botolo::Bot::Behaviour.new({:name=>name})
+          @behaviour = Botolo::Bot::Behaviour.new(@config)
         rescue => e
           $logger.err(e.message)
           require 'botolo/bot/behaviour'
           $logger.log "reverting to default dummy behaviour"
-          @behaviour = Botolo::Bot::Behaviour.new({:name=>name})
+          @behaviour = Botolo::Bot::Behaviour.new(@config)
         end
 
 
