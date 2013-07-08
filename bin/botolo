@@ -5,6 +5,7 @@ require 'openssl'
 require 'codesake_commons'
 
 DEFAULT_BEHAVIOUR = "./lib/botolo/bot/behaviour.rb"
+BOTOLO_PID = File.join(".", "botolo.pid") 
 
 OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
@@ -17,10 +18,20 @@ config_file = ARGV[0] if ARGV.count == 1
 
 $logger.die "usage: botolo bot_configuration_file" if config_file.nil?
 
-@bot = Botolo::Bot::Engine.new({:config=>config_file})
-$logger.log "#{@bot.name} is online" if @bot.online?
-$logger.log "#{@bot.name} is offline" unless @bot.online?
-@bot.run if @bot.online?
-@bot.infinite_loop
+$logger.log Process.pid
+son = Process.fork {
+  $logger.helo "booting botolo v#{Botolo::VERSION} (C) 2013 paolo@armoredcode.com", BOTOLO_PID
+  $logger.log "daemonizing (pid=#{Process.pid}). PID file is #{BOTOLO_PID}"
+
+
+  @bot = Botolo::Bot::Engine.new({:config=>config_file})
+  $logger.log "#{@bot.name} is online" if @bot.online?
+  $logger.log "#{@bot.name} is offline" unless @bot.online?
+  @bot.run if @bot.online?
+  @bot.infinite_loop
+}
+
+Process.detach(son)
+sleep 5
 
 
