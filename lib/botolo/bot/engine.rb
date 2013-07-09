@@ -60,8 +60,9 @@ module Botolo
       end
 
       def infinite_loop
-        while true
-
+        loop do
+          sleep(3600) # => 1 d
+          $logger.log " --- mark --- "
         end
       end
 
@@ -81,7 +82,7 @@ module Botolo
         $logger.log "shutting down threads"
         @task_pids.each do |pid|
           Thread.kill(pid)
-          sleep 0.1
+          sleep 0.5
           $logger.log "pid #{pid} killed" if ! pid.alive? 
           $logger.err "pid #{pid} not killed" if pid.alive? 
         end

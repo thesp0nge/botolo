@@ -10,6 +10,7 @@ BOTOLO_PID = File.join(".", "botolo.pid")
 OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
 $logger  = Codesake::Commons::Logging.instance
+$logger.filename="./codesake-bot.log"
 trap("INT")   { @bot.stop; $logger.helo('bot is shutting down'); Kernel.exit(0) }
 
 behaviour_file = DEFAULT_BEHAVIOUR
@@ -18,20 +19,13 @@ config_file = ARGV[0] if ARGV.count == 1
 
 $logger.die "usage: botolo bot_configuration_file" if config_file.nil?
 
-$logger.log Process.pid
-son = Process.fork {
-  $logger.helo "booting botolo v#{Botolo::VERSION} (C) 2013 paolo@armoredcode.com", BOTOLO_PID
-  $logger.log "daemonizing (pid=#{Process.pid}). PID file is #{BOTOLO_PID}"
+$logger.helo "booting botolo v#{Botolo::VERSION} (C) 2013 paolo@armoredcode.com", BOTOLO_PID
 
-
-  @bot = Botolo::Bot::Engine.new({:config=>config_file})
-  $logger.log "#{@bot.name} is online" if @bot.online?
-  $logger.log "#{@bot.name} is offline" unless @bot.online?
-  @bot.run if @bot.online?
-  @bot.infinite_loop
-}
-
-Process.detach(son)
-sleep 5
+@bot = Botolo::Bot::Engine.new({:config=>config_file})
+$logger.log "#{@bot.name} is online" if @bot.online?
+$logger.log "#{@bot.name} is offline" unless @bot.online?
+@bot.run if @bot.online?
+  # Process.daemon(true, true)
+@bot.infinite_loop
 
 
