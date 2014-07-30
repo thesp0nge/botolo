@@ -9,11 +9,11 @@ module Botolo
         @start_time = Time.now
         @online = false
         @config = read_conf(options[:config])
+        $twitter_client = nil
         authenticate if @config['twitter']['enabled']
 
         @tasks = @config['task']
         @task_pids = []
-        $twitter_client = nil
 
         behaviour = File.join(".", @config['bot']['behaviour']) unless @config['bot']['behaviour'].nil?
 
