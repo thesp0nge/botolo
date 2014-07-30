@@ -2,7 +2,7 @@
 
 require 'botolo'
 require 'openssl'
-require 'codesake_commons'
+require 'codesake-commons'
 
 DEFAULT_BEHAVIOUR = "./lib/botolo/bot/behaviour.rb"
 BOTOLO_PID = File.join(".", "botolo.pid") 
