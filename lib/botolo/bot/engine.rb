@@ -88,7 +88,7 @@ module Botolo
 
       def authenticate
         begin
-          $twitter_client = Twitter::REST::client.new do |config|
+          $twitter_client = Twitter::REST::Client.new do |config|
             config.consumer_key = @config['twitter']['consumer_key']
             config.consumer_secret = @config['twitter']['consumer_secret']
             config.oauth_token = @config['twitter']['oauth_token']
