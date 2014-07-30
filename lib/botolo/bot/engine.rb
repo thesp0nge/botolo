@@ -16,7 +16,7 @@ module Botolo
 
         behaviour = File.join(".", @config['bot']['behaviour']) unless @config['bot']['behaviour'].nil?
 
-        $logger.helo "#{name} v#{version} is starting up"
+        $logger.helo name, version
         $logger.log "#{@tasks.size} tasks loaded"
 
         begin
