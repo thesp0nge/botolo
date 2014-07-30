@@ -19,7 +19,7 @@ config_file = ARGV[0] if ARGV.count == 1
 
 $logger.die "usage: botolo bot_configuration_file" if config_file.nil?
 
-$logger.helo "booting botolo v#{Botolo::VERSION} (C) 2013 paolo@armoredcode.com", BOTOLO_PID
+$logger.helo "botolo", Botolo::VERSION, BOTOLO_PID
 
 @bot = Botolo::Bot::Engine.new({:config=>config_file})
 $logger.log "#{@bot.name} is online" if @bot.online?
