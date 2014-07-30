@@ -14,10 +14,9 @@ module Botolo
         @tasks = @config['task']
         @task_pids = []
 
-        behaviour = File.join(".", @config['bot']['behaviour']) unless @config['bot']['behaviour'].nil? 
+        behaviour = File.join(".", @config['bot']['behaviour']) unless @config['bot']['behaviour'].nil?
 
         $logger.helo "#{name} v#{version} is starting up"
-        
         $logger.log "#{@tasks.size} tasks loaded"
 
         begin
@@ -30,12 +29,9 @@ module Botolo
           $logger.log "reverting to default dummy behaviour"
           @behaviour = Botolo::Bot::Behaviour.new(@config)
         end
-
-
       end
 
       def calc_sleep_time(task)
-        
         s = /every (\d) (s|m|h|d|w|y)/.match task
 
         return 300 if s.nil? # safe fallback is 5 minutes sleeping
@@ -56,7 +52,6 @@ module Botolo
             start_task(task['action'], task['schedule'])
           end
         end
-
       end
 
       def infinite_loop
@@ -90,7 +85,6 @@ module Botolo
         true
       end
 
-      
       def authenticate
         begin
           Twitter.configure do |config|
