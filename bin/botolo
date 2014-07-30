@@ -11,7 +11,7 @@ OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
 $logger  = Codesake::Commons::Logging.instance
 $logger.filename="./codesake-bot.log"
-trap("INT")   { @bot.stop; $logger.helo('bot is shutting down'); Kernel.exit(0) }
+trap("INT")   { @bot.stop; $logger.bye }
 
 behaviour_file = DEFAULT_BEHAVIOUR
 config_file = nil
