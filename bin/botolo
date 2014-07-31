@@ -10,7 +10,7 @@ BOTOLO_PID = File.join(".", "botolo.pid")
 OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
 $logger  = Codesake::Commons::Logging.instance
-$logger.filename="./codesake-bot.log"
+$logger.filename="./botolo.log"
 trap("INT")   { @bot.stop; $logger.bye; Kernel.exit(0); }
 
 behaviour_file = DEFAULT_BEHAVIOUR
@@ -22,7 +22,7 @@ $logger.die "usage: botolo bot_configuration_file" if config_file.nil?
 $logger.helo "botolo", Botolo::VERSION, BOTOLO_PID
 
 @bot = Botolo::Bot::Engine.new({:config=>config_file})
-$logger.log "#{@bot.name} is online" if @bot.online?
+$logger.log "#{@bot.name} is online"  if @bot.online?
 $logger.log "#{@bot.name} is offline" unless @bot.online?
 @bot.run if @bot.online?
   # Process.daemon(true, true)

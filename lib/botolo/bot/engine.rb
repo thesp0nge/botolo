@@ -57,7 +57,7 @@ module Botolo
 
       def infinite_loop
         loop do
-          sleep(3600) # => 1 d
+          sleep(3600) # => 1 h
           $logger.log " --- mark --- "
         end
       end
@@ -89,10 +89,16 @@ module Botolo
       def authenticate
         begin
           $twitter_client = Twitter::REST::Client.new do |config|
-            config.consumer_key = @config['twitter']['consumer_key']
-            config.consumer_secret = @config['twitter']['consumer_secret']
-            config.oauth_token = @config['twitter']['oauth_token']
-            config.oauth_token_secret = @config['twitter']['oauth_token_secret']
+            config.consumer_key         = @config['twitter']['consumer_key']
+            config.consumer_secret      = @config['twitter']['consumer_secret']
+
+            # FIXME: This config is deprecated and it will be soon be removed
+            $logger.warn("Please note that oauth_token_secret and oauth_token config keys are deprecated.  Use access_token_secret and access_token instead")
+            config.access_token         = @config['twitter']['oauth_token']         unless @config['twitter']['oauth_token'].nil?
+            config.access_token_secret  = @config['twitter']['oauth_token_secret']  unless @config['twitter']['oauth_token_secret'].nil?
+
+            config.access_token         = @config['twitter']['access_token']        unless @config['twitter']['access_token'].nil?
+            config.access_token_secret  = @config['twitter']['access_token_secret'] unless @config['twitter']['access_token_secret'].nil?
           end
           @online = true
         rescue Exception => e
