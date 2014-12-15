@@ -3,6 +3,12 @@
 require 'botolo'
 require 'openssl'
 require 'codesake-commons'
+require 'getoptlong'
+
+opts = GetoptLong.new(
+  [ "--help",    "-h", GetoptLong::NO_ARGUMENT],
+  [ "--version", "-v", GetoptLong::NO_ARGUMENT ]
+)
 
 DEFAULT_BEHAVIOUR = "./lib/botolo/bot/behaviour.rb"
 BOTOLO_PID = File.join(".", "botolo.pid") 
