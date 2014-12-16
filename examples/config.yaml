@@ -5,9 +5,8 @@ bot:
   version: 1.0
   email: paolo@codesake.com
   behaviour: dummy-bot.rb
+  logfile: dummy-log.log
 
-logging:
-  enable: true
 
 twitter:
   enabled: no
