@@ -16,7 +16,7 @@ BOTOLO_PID = File.join(".", "botolo.pid")
 OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
 $logger  = Codesake::Commons::Logging.instance
-$logger.filename="./botolo.log"
+# $logger.filename="./botolo.log"
 trap("INT")   { @bot.stop; $logger.bye; Kernel.exit(0); }
 
 behaviour_file = DEFAULT_BEHAVIOUR
