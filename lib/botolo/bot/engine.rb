@@ -1,4 +1,3 @@
-require 'twitter'
 require 'yaml'
 
 module Botolo
@@ -9,13 +8,19 @@ module Botolo
         @start_time = Time.now
         @online = false
         @config = read_conf(options[:config])
-        $twitter_client = nil
-        authenticate if @config['twitter']['enabled']
+        $twitter_api = nil
+
+        behaviour_path = File.dirname(options[:config])
+
+        if @config['twitter']['enabled']
+          $twitter_api = Botolo::API::Tweet.instance
+          $twitter_api.authenticate(@config['twitter']) 
+        end
 
         @tasks = @config['task']
         @task_pids = []
 
-        behaviour = File.join(".", @config['bot']['behaviour']) unless @config['bot']['behaviour'].nil?
+        behaviour = File.join(behaviour_path, @config['bot']['behaviour']) unless @config['bot']['behaviour'].nil?
 
         $logger.helo name, version
         $logger.log "#{@tasks.size} tasks loaded"
@@ -84,26 +89,6 @@ module Botolo
         end
 
         true
-      end
-
-      def authenticate
-        begin
-          $twitter_client = Twitter::REST::Client.new do |config|
-            config.consumer_key         = @config['twitter']['consumer_key']
-            config.consumer_secret      = @config['twitter']['consumer_secret']
-
-            # FIXME: This config is deprecated and it will be soon be removed
-            $logger.warn("Please note that oauth_token_secret and oauth_token config keys are deprecated.  Use access_token_secret and access_token instead")
-            config.access_token         = @config['twitter']['oauth_token']         unless @config['twitter']['oauth_token'].nil?
-            config.access_token_secret  = @config['twitter']['oauth_token_secret']  unless @config['twitter']['oauth_token_secret'].nil?
-
-            config.access_token         = @config['twitter']['access_token']        unless @config['twitter']['access_token'].nil?
-            config.access_token_secret  = @config['twitter']['access_token_secret'] unless @config['twitter']['access_token_secret'].nil?
-          end
-          @online = true
-        rescue Exception => e
-          $logger.err e.message
-        end
       end
 
       def online?
