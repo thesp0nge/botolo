@@ -16,6 +16,7 @@ module Botolo
           a=Hash.new
           a[:name] = account['name']
           begin
+            $logger.log "authenticating #{a[:name]}"
             a[:client] = Twitter::REST::Client.new do |config|
               config.consumer_key         = account['consumer_key']
               config.consumer_secret      = account['consumer_secret']
