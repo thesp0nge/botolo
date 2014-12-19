@@ -18,6 +18,8 @@ module Botolo
         behaviour = File.join(".", @config['bot']['behaviour']) unless @config['bot']['behaviour'].nil?
 
         $logger.helo name, version
+        $logger.filename = File.join(".", logfile) unless logfile.nil?
+
         $logger.log "#{@tasks.size} tasks loaded"
 
         begin
@@ -108,6 +110,10 @@ module Botolo
 
       def online?
         @online
+      end
+
+      def logfile
+        return @config['bot']['logfile']
       end
 
       def name

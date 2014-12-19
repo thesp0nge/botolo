@@ -39,6 +39,7 @@ bot:
   email: paolo@codesake.com
   # This overrides any behaviour file passed as argument
   behaviour: dummy-bot.rb
+  logfile: dummy-bot.log
 
 twitter:
   enabled: no
