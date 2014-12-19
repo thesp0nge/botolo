@@ -11,6 +11,11 @@ module Botolo
       def say_foo
         puts "foo"
       end
+
+      def tweet_hello
+        return "" if $twitter_api.nil?
+        $twitter_api.tweet("hello")
+      end
     end
   end
 end
