@@ -4,7 +4,8 @@ bot:
   name: dummy-bot
   version: 1.0
   email: paolo@codesake.com
-  behaviour: dummy-bot.rb
+  logfile: dummy_log.log
+  behaviour: dummy_bot.rb
 
 twitter:
   enabled: no

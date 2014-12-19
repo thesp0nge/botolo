@@ -1,3 +1,3 @@
 module Botolo
-  VERSION = "0.32.9"
+  VERSION = "0.50.0"
 end

@@ -1,0 +1,19 @@
+verbose: true
+
+bot:
+  name: dummy-bot
+  version: 1.0
+  email: paolo@codesake.com
+  behaviour: dummy_bot.rb
+
+twitter:
+  enabled: yes
+  accounts:
+    - {name: first, consumer_key: "AAAAAAAAAAAAAAAAAAAAAAAAA", consumer_secret: "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB", oauth_token: "999999999-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", oauth_token_secret: "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"}
+    - {name: second, consumer_key: "AAAAAAAAAAAAAAAAAAAAAAAAA", consumer_secret: "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB", oauth_token: "999999999-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", oauth_token_secret: "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"}
+    - {name: third, consumer_key: "AAAAAAAAAAAAAAAAAAAAAAAAA", consumer_secret: "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB", oauth_token: "999999999-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", oauth_token_secret: "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"}
+
+task:
+  - { schedule: every 5 s, action: say_hello }
+  - { schedule: every 3 s, action: say_foo }
+  - { schedule: every 1 h, action: tweet_hello }

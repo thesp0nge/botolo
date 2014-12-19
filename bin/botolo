@@ -6,6 +6,7 @@ require 'codesake-commons'
 require 'getoptlong'
 
 opts = GetoptLong.new(
+  [ "--debug",   "-D", GetoptLong::NO_ARGUMENT],
   [ "--help",    "-h", GetoptLong::NO_ARGUMENT],
   [ "--version", "-v", GetoptLong::NO_ARGUMENT ]
 )
@@ -16,8 +17,29 @@ BOTOLO_PID = File.join(".", "botolo.pid")
 OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
 $logger  = Codesake::Commons::Logging.instance
-$logger.filename="./botolo.log"
-trap("INT")   { @bot.stop; $logger.bye; Kernel.exit(0); }
+trap("INT")   { @bot.stop; $logger.bye; File.delete(BOTOLO_PID); Kernel.exit(0); }
+
+opts.quiet=true
+debug = false
+
+begin
+  opts.each do |opt, val|
+    case opt
+    when '--version'
+      puts "#{Botolo::VERSION}"
+      Kernel.exit(0)
+    when '--help'
+      puts "I'll put an help here... promise"
+      Kernel.exit(0)
+    when '--debug'
+      debug = true
+    end
+  end
+rescue GetoptLong::InvalidOption => e
+  $logger.helo "botolo", Botolo::VERSION, BOTOLO_PID
+  $logger.err e.message
+  Kernel.exit(-1)
+end
 
 behaviour_file = DEFAULT_BEHAVIOUR
 config_file = nil
@@ -30,8 +52,13 @@ $logger.helo "botolo", Botolo::VERSION, BOTOLO_PID
 @bot = Botolo::Bot::Engine.new({:config=>config_file})
 $logger.log "#{@bot.name} is online"  if @bot.online?
 $logger.log "#{@bot.name} is offline" unless @bot.online?
-@bot.run if @bot.online?
-  # Process.daemon(true, true)
+
+if debug
+  $logger.debug "forcing #{@bot.name} run"
+  @bot.run
+else
+  @bot.run if @bot.online?
+end
 @bot.infinite_loop
 
 

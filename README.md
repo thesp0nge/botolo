@@ -39,6 +39,7 @@ bot:
   email: paolo@codesake.com
   # This overrides any behaviour file passed as argument
   behaviour: dummy-bot.rb
+  logfile: dummy-bot.log
 
 twitter:
   enabled: no
@@ -110,10 +111,49 @@ botolo:9: warning: already initialized constant OpenSSL::SSL::VERIFY_PEER
 Custom written behaviour can use the global variable $logger to use botolo logging
 facilities and having the stdout/stderr prints more consistent.
 
+The same ruby class can have some social integration adding twitter support in
+its behaviour file.
+
+Since botolo version 0.50, more twitter accounts are supported and
+Botolo::API::Twitter are introduced to provide basic services to your bots.
+
+```
+verbose: true
+
+bot:
+  name: dummy-bot
+  version: 1.0
+  email: paolo@codesake.com
+  behaviour: dummy-bot.rb
+
+twitter:
+  enabled: yes
+  accounts:
+    - { name: first, consumer_key: "AAAAAAAAAAAAAAAAAAAAAAAAA", consumer_secret: "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB", oauth_token: "999999999-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", oauth_token_secret: "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"}
+    - { name: second, consumer_key: "AAAAAAAAAAAAAAAAAAAAAAAAA", consumer_secret: "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB", oauth_token: "999999999-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", oauth_token_secret: "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"}
+    - { name: third, consumer_key: "AAAAAAAAAAAAAAAAAAAAAAAAA", consumer_secret: "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB", oauth_token: "999999999-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", oauth_token_secret: "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"}
+
+task:
+  - { schedule: every 5 s, action: say_hello }
+  - { schedule: every 3 s, action: say_foo }
+  - { schedule: every 1 h, action: tweet_hello }
+```
+
+The tweet\_hello routine is very simple:
+
+```
+def tweet_hello
+  return "" if $twitter_api.nil?
+  $twitter_api.tweet("hello")
+end
+```
+
+The ```$twitter_api``` ojeect is something provided by the engine, so it's very
+easy for bot writers.
+
 ## Missing features
 
-A back channels for threads to communicate with the engine about action
-status.
+Other social network integration, mainly facebook.
 
 ## Contributing
 
