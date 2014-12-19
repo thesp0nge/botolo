@@ -29,11 +29,13 @@ module Botolo
           load behaviour
           $logger.log "using #{behaviour} as bot behaviour"
           @behaviour = Botolo::Bot::Behaviour.new(@config)
+          @start_time = Time.now
         rescue => e
           $logger.err(e.message)
           require 'botolo/bot/behaviour'
           $logger.log "reverting to default dummy behaviour"
           @behaviour = Botolo::Bot::Behaviour.new(@config)
+          @start_time = Time.now
         end
       end
 
@@ -63,8 +65,22 @@ module Botolo
       def infinite_loop
         loop do
           sleep(3600) # => 1 h
-          $logger.log " --- mark --- "
+          $logger.log " --- mark --- (bot: #{@behaviour.name}, uptime: #{uptime})"
         end
+      end
+
+      def uptime
+        seconds_diff = (Time.now - @start_time).to_i.abs
+
+        days = seconds_diff / 86400
+        seconds_diff -= days * 86400
+
+        hours = seconds_diff / 3600
+        seconds_diff -= hours * 3600
+
+        minutes = seconds_diff / 60
+
+        "#{days.to_s} days, #{hours.to_s.rjust(2, '0')}:#{minutes.to_s.rjust(2, '0')}"
       end
 
       def start_task(name, sleep)
