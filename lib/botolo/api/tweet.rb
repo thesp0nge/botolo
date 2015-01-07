@@ -16,7 +16,6 @@ module Botolo
           a=Hash.new
           a[:name] = account['name']
           begin
-            $logger.log "authenticating #{a[:name]}"
             a[:client] = Twitter::REST::Client.new do |config|
               config.consumer_key         = account['consumer_key']
               config.consumer_secret      = account['consumer_secret']
@@ -24,12 +23,14 @@ module Botolo
               config.access_token         = account['access_token']        unless account['access_token'].nil?
               config.access_token_secret  = account['access_token_secret'] unless account['access_token_secret'].nil?
             end
+            $logger.ok "#{a[:name]} authenticated successfully"
           rescue Exception => e
-            $logger.err e.message
+            $logger.err "can't authenticate #{a[:name]} (#{e.message})"
           end
 
         @twitters << a
       end
+        $logger.debug "#{@twitters}"
 
       @twitters
     end
@@ -37,7 +38,12 @@ module Botolo
     def tweet(name=nil, msg)
       return nil if msg.empty?
       @twitters.each do |t|
-        t[:client].update(msg) if (name.nil? or (!name.nil? and name == t[:name]))
+        $logger.debug "#{t[:name]} sending #{msg}"
+        begin
+          t[:client].update(msg) if (name.nil? or (!name.nil? and name == t[:name]))
+        rescue => e
+          $logger.err "#{e.message}"
+        end
       end
       return msg
     end

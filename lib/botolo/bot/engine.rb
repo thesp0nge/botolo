@@ -14,8 +14,8 @@ module Botolo
 
         if @config['twitter']['enabled']
           $twitter_api = Botolo::API::Tweet.instance
-          $twitter_api.authenticate(@config['twitter']) 
-          @online unless $twitter_api.twitters.empty?
+          $twitter_api.authenticate(@config['twitter'])
+          @online = true unless $twitter_api.twitters.empty?
         end
 
         @tasks = @config['task']
