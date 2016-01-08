@@ -2,7 +2,7 @@
 
 require 'botolo'
 require 'openssl'
-require 'codesake-commons'
+require 'logger'
 require 'getoptlong'
 
 opts = GetoptLong.new(
@@ -12,11 +12,13 @@ opts = GetoptLong.new(
 )
 
 DEFAULT_BEHAVIOUR = "./lib/botolo/bot/behaviour.rb"
-BOTOLO_PID = File.join(".", "botolo.pid") 
+BOTOLO_PID = File.join(".", "botolo.pid")
 
 OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
-$logger  = Codesake::Commons::Logging.instance
+$logger = Logger.new(STDOUT)
+$logger.datetime_format = '%Y-%m-%d %H:%M:%S'
+
 trap("INT")   { @bot.stop; $logger.bye; File.delete(BOTOLO_PID); Kernel.exit(0); }
 
 opts.quiet=true
@@ -47,7 +49,7 @@ config_file = ARGV[0] if ARGV.count == 1
 
 $logger.die "usage: botolo bot_configuration_file" if config_file.nil?
 
-$logger.helo "botolo", Botolo::VERSION, BOTOLO_PID
+$logger.helo "botolo", Botolo::VERSION
 
 @bot = Botolo::Bot::Engine.new({:config=>config_file})
 $logger.log "#{@bot.name} is online"  if @bot.online?

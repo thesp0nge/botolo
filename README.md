@@ -50,7 +50,7 @@ task:
 
 Botolo expects to find in the current directory a file named dummy-bot.rb
 implementing the two methods (say\_hello and say\_foo) it has to run based upon
-this schedule. 
+this schedule.
 There is a **big** constraint: your ruby file must be a Botolo::Bot::Behaviour
 class. It must also implement an initialize method with an Hash parameter
 engine will use to pass options to the bot.
