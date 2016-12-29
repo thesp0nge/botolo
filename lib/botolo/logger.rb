@@ -13,4 +13,8 @@ class Logger
     info "#{@app} is shutting down"
   end
 
+  def err(msg)
+		  error(msg)
+  end
+
 end
