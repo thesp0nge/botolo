@@ -1,3 +1,4 @@
+require "botolo/logger"
 require "botolo/version"
 require "botolo/api/blog"
 require "botolo/api/tweet"
