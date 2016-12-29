@@ -5,6 +5,9 @@ class Logger
     @app = app
     info "#{app} v#{version} is starting up"
   end
+  def ok(msg)
+		  info(msg)
+  end
   def die(msg)
     error(msg)
     Kernel.exit(-1)
