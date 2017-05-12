@@ -67,7 +67,7 @@ module Botolo
             tweet = list[0][index]
             begin
               @twitters.each do |t|
-                $logger.debug("retwetting: #{tweet.txt}")
+                $logger.debug("retwetting: #{tweet.text}")
                 t[:client].retweet(tweet)
               end
             rescue => e
