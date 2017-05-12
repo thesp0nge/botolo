@@ -28,50 +28,50 @@ module Botolo
             $logger.err "can't authenticate #{a[:name]} (#{e.message})"
           end
 
-        @twitters << a
-      end
-        $logger.debug "#{@twitters}"
-
-      @twitters
-    end
-
-    def tweet(name=nil, msg)
-      return nil if msg.empty?
-      @twitters.each do |t|
-        $logger.debug "#{t[:name]} sending #{msg}"
-        begin
-          t[:client].update(msg) if (name.nil? or (!name.nil? and name == t[:name]))
-        rescue => e
-          $logger.err "#{e.message}"
+          @twitters << a
         end
-      end
-      return msg
-    end
 
-    def retweet(name=nil, msg)
-      return nil if msg.empty?
-      @twitters.each do |t|
-        t[:client].retweet(msg) if (name.nil? or (!name.nil? and name == t[:name]))
-      end
-      return msg
-    end
-
-    def find_and_retweet_topic(limit = 5, topic)
-      list = []
-      @twitters.each do |tt|
-        list << tt[:client].search("#appsec").to_a
+        @twitters
       end
 
-      unless list.nil?
-        (0..limit-1).each do |l|
-          t = list[SecureRandom.random_number(list.count)]
-          $logger.debug "retwitting #{t["from_user"]}: #{t["text"]}"
+      def tweet(name=nil, msg)
+        return nil if msg.empty?
+        @twitters.each do |t|
+          $logger.debug "#{t[:name]} sending #{msg}"
           begin
-            @twitters.each do |t|
-              t[:client].retweet(msg) if (name.nil? or (!name.nil? and name == t[:name]))
-            end
+            t[:client].update(msg) if (name.nil? or (!name.nil? and name == t[:name]))
           rescue => e
-              $logger.err("error tweeting #{t["text"]}: #{e.message}")
+            $logger.err "#{e.message}"
+          end
+        end
+        return msg
+      end
+
+      def retweet(name=nil, msg)
+        return nil if msg.empty?
+        @twitters.each do |t|
+          t[:client].retweet(msg) if (name.nil? or (!name.nil? and name == t[:name]))
+        end
+        return msg
+      end
+
+      def find_and_retweet_topic(limit = 5, topic)
+        list = []
+        @twitters.each do |tt|
+          list << tt[:client].search(topic).to_a
+        end
+
+        unless list.nil?
+          (0..limit-1).each do |l|
+            index = SecureRandom.random_number(list[0].count)
+            tweet = list[0][index]
+            begin
+              @twitters.each do |t|
+                $logger.debug("retwetting: #{tweet.txt}")
+                t[:client].retweet(tweet)
+              end
+            rescue => e
+              $logger.err("error tweeting #{tweet.text}: #{e.message}")
             end
             sleep(15)
           end

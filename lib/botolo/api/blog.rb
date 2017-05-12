@@ -20,7 +20,7 @@ module Botolo
         rss.items.each_with_index do |item, i|
           @feed << {:title=>item.title.content, :link=>item.link.href}
         end
-        $logger.log "#{@feed.size} elements loaded from feed"
+        $logger.info "#{@feed.size} elements loaded from feed"
       end
 
       def tweet_random_posts(limit = 3, hashtags="")

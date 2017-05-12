@@ -26,17 +26,17 @@ module Botolo
         $logger.helo name, version
         $logger.filename = File.join(".", logfile) unless logfile.nil?
 
-        $logger.log "#{@tasks.size} tasks loaded"
+        $logger.info "#{@tasks.size} tasks loaded"
 
         begin
           load behaviour
-          $logger.log "using #{behaviour} as bot behaviour"
+          $logger.info "using #{behaviour} as bot behaviour"
           @behaviour = Botolo::Bot::Behaviour.new(@config)
           @start_time = Time.now
         rescue => e
           $logger.err(e.message)
           require 'botolo/bot/behaviour'
-          $logger.log "reverting to default dummy behaviour"
+          $logger.info "reverting to default dummy behaviour"
           @behaviour = Botolo::Bot::Behaviour.new(@config)
           @start_time = Time.now
         end
@@ -57,7 +57,7 @@ module Botolo
       end
 
       def run
-        $logger.log "entering main loop"
+        $logger.info "entering main loop"
         @tasks.each do |task|
           @task_pids << Thread.start do
             start_task(task['action'], task['schedule'])
@@ -68,7 +68,7 @@ module Botolo
       def infinite_loop
         loop do
           sleep(3600) # => 1 h
-          $logger.log " --- mark --- (bot: #{@behaviour.name}, uptime: #{uptime})"
+          $logger.info " --- mark --- (bot: #{@behaviour.name}, uptime: #{uptime})"
         end
       end
 
@@ -99,11 +99,11 @@ module Botolo
       end
 
       def stop
-        $logger.log "shutting down threads"
+        $logger.info "shutting down threads"
         @task_pids.each do |pid|
           Thread.kill(pid)
           sleep 0.5
-          $logger.log "pid #{pid} killed" if ! pid.alive? 
+          $logger.info "pid #{pid} killed" if ! pid.alive? 
           $logger.err "pid #{pid} not killed" if pid.alive? 
         end
 

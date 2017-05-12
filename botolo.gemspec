@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
     you can focus on writing a set of actions your bot will execute every
     amount of seconds, minutes or whatever and implement those actions. The
     part of executing them and putting babies to sleep will be up to botolo.}
-  spec.homepage      = "http://codesake.com"
+  spec.homepage      = "https://codiceinsicuro.it"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
@@ -25,4 +25,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
   spec.add_dependency "twitter", "~> 5.11.0"
   spec.add_dependency "logger-colors"
+  spec.add_dependency "data_mapper"
+  spec.add_dependency "dm-sqlite-adapter"
 end

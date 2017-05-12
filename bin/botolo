@@ -19,7 +19,7 @@ OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 $logger = Logger.new(STDOUT)
 $logger.datetime_format = '%Y-%m-%d %H:%M:%S'
 
-trap("INT")   { @bot.stop; $logger.bye; File.delete(BOTOLO_PID); Kernel.exit(0); }
+trap("INT")   { @bot.stop; File.delete(BOTOLO_PID); Kernel.exit(0); }
 
 opts.quiet=true
 debug = false
@@ -52,8 +52,8 @@ $logger.die "usage: botolo bot_configuration_file" if config_file.nil?
 $logger.helo "botolo", Botolo::VERSION
 
 @bot = Botolo::Bot::Engine.new({:config=>config_file})
-$logger.log "#{@bot.name} is online"  if @bot.online?
-$logger.log "#{@bot.name} is offline" unless @bot.online?
+$logger.info "#{@bot.name} is online"  if @bot.online?
+$logger.info "#{@bot.name} is offline" unless @bot.online?
 
 if debug
   $logger.debug "forcing #{@bot.name} run"
