@@ -10,6 +10,9 @@ bot:
 twitter:
   enabled: no
 
+linkedin:
+  enabled: no
+
 task:
   - { schedule: every 5 s, action: say_hello }
   - { schedule: every 3 s, action: say_foo }
